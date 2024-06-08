@@ -6,7 +6,8 @@ import AddTask from '../AddTask/AddTask';
 
 const Home = () => {
     const flag = localStorage.getItem('task_timers');
-    const [cnt, setCnt] = useState(0);
+    const flag1 = localStorage.getItem('cnt');
+    const [cnt, setCnt] = useState(flag1 ? parseInt(flag1) : 0);
     const [task_timers, setTaskTimers] = useState(flag ? JSON.parse(flag) : []);
     const [showPopUp, setShowPopUp] = useState(false);
 
@@ -31,8 +32,9 @@ const Home = () => {
     }
 
     useEffect(() => {
+        localStorage.setItem('cnt', cnt);
         localStorage.setItem('task_timers', JSON.stringify(task_timers));
-    }, [task_timers]);
+    }, [task_timers, cnt]);
 
     return(
         <div>

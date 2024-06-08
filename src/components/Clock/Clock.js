@@ -14,10 +14,15 @@ const Clock = (props) => {
     const [isRunning, setIsRunning] = useState(props.clock.isRunning);
     const clockState = seconds === 0 ? 'start-pause reset': (isRunning? 'start-pause running' : 'start-pause notrunning');
     const currState = (seconds === 0)? 'Reset' : (isRunning? 'Pause' : 'Start');
-    
+    const [details, setDetails] = useState('clock show');
+    const [doEdit, setDoEdit] = useState('clock hide');
+    const [task_, setTask] = useState({...props.clock, time: giveTime(props.clock.time)});
+
     useEffect(() => {
         let interval;
         if(isRunning && seconds > 0){
+            setDetails('clock show');
+            setDoEdit('clock hide');
             interval = setInterval(() => {
                 setSeconds((prevSeconds) => {
                     setTime(giveTime(prevSeconds - 1));
@@ -42,7 +47,7 @@ const Clock = (props) => {
                 });
             });
         }
-    }, [isRunning, seconds, props]);
+    }, [isRunning, seconds]);
 
     const changeState = () => {
         if(seconds === 0){
@@ -71,13 +76,69 @@ const Clock = (props) => {
         });
     }
 
+    const editClock = (e) => {
+        e.stopPropagation();
+        setDetails('clock hide');
+        setDoEdit('clock show');
+    };
+
+    const detailClock = (e) => {
+        e.preventDefault();
+        setDetails('clock show');
+        setDoEdit('clock hide');
+    };
+
+    const editTask = (e) => {
+        e.preventDefault();
+        if(task_.title === ""){
+            alert("Please enter all the fields");
+            return;
+        }
+        const timePattern = /^([0-9]|[0-9][0-9]):([0-5][0-9]):([0-5][0-9])$/;
+        if(!timePattern.test(task_.time)){
+            alert("Please enter time in hh:mm:ss format");
+            return;
+        }
+
+        const temp = parseInt(task_.time.slice(0, 2)) * 3600 + parseInt(task_.time.slice(3, 5)) * 60 + parseInt(task_.time.slice(6, 8));
+        setSeconds(temp);
+        setTime(giveTime(temp));
+        props.setTasks((prevTasks) => {
+            return prevTasks.map((task) => {
+                if(task.id === task_.id){
+                    return {...task_, time: temp, prevTime: temp};
+                }
+                return task;
+            });
+        });
+        setDetails('clock show');
+        setDoEdit('clock hide');
+    };
+
     return (
-        <div className='clock'>
-            <div className="delete" onClick={deleteClock}>X</div>
-            <div className={clockState} onClick={changeState}>{currState}</div>
-            <div className='details'>
-                <h1>{props.clock.title}</h1>
-                <div className='time'>{time}</div>
+        <div>
+            <div className={details}>
+                <div className="edit-delete">
+                    <div className="edit" onClick={editClock}>Edit</div>
+                    <div className="delete" onClick={deleteClock}>X</div>
+                </div>
+                <div className={clockState} onClick={changeState}>{currState}</div>
+                <div className='details'>
+                    <h1>{props.clock.title}</h1>
+                    <div className='time'>{time}</div>
+                </div>
+            </div>
+            <div className={doEdit}>
+                <div className="edit-delete">
+                    <div></div>
+                    <div className="delete" onClick={detailClock}>X</div>
+                </div>
+                <div className={clockState} onClick={changeState}>{currState}</div>
+                <div className='details'>
+                    <input type="text" placeholder="Task Name" value={task_.title} onChange={(e) => setTask({...task_, title: e.target.value})}/>
+                    <input placeholder="hh:mm:ss" value={task_.time} pattern="\d{2}:\d{2}:\d{2}" onChange={(e) => setTask({...task_, time: e.target.value})}/>
+                    <button type="submit" className="edit-button" onClick={editTask}>Edit Task</button>
+                </div>
             </div>
         </div>
     );

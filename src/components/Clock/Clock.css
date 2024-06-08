@@ -10,6 +10,22 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
+.form{
+    position: fixed;
+    top: 10%;
+    left: 35%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    margin-left: auto;
+    width: 30%;
+    height: 50vh;
+    background-color: cornsilk;
+    z-index: 1000;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
 .start-pause{
     display: flex;
     justify-content: center;
@@ -53,19 +69,64 @@
     text-align: center;
 }
 
+.details input{
+    width: 80%;
+    height: 30px;
+    margin-top: 20px;
+    border-radius: 5px;
+    border: 1px solid black;
+    font-size: larger;
+}
+
 .time{
     font-size: 2rem;
 }
 
-.delete{
-    background-color: red;
-    color: #fff;
-    border: none;
+.edit-button{
+    margin-top: 10px;
+    margin-bottom: 20%;
+    width: 80%;
+    height: 10%;
     border-radius: 5px;
-    padding: 5px;
+    border: 1px solid black;
+    background-color: lightblue;
+    color: black;
+    font-size: larger;
+}
+
+.edit-button:hover{
+    cursor: pointer;
+}
+
+.edit-delete{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.edit{
+    color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}   
+
+.edit:hover{
+    cursor: pointer;
+}
+
+.delete{
+    color: red;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 .delete:hover{
     cursor: pointer;
 }
 
+.show{
+    display: flex;
+}
+
+.hide{
+    display: none;
+}
