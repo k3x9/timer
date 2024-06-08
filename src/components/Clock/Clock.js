@@ -49,6 +49,25 @@ const Clock = (props) => {
         }
     }, [isRunning, seconds]);
 
+    useEffect(() => {
+        const reload = (e) => {
+            e.preventDefault();
+            props.setTasks((prevTasks) => {
+                return prevTasks.map((task) => {
+                    if(task.id === props.clock.id){
+                        return {...task, time: seconds};
+                    }
+                    return task;
+                });
+            });
+            e.returnValue = '';
+        };
+
+        window.addEventListener('beforeunload', reload);
+
+        return () => {window.removeEventListener('beforeunload', reload);}
+    }, [seconds]);
+
     const changeState = () => {
         if(seconds === 0){
             setSeconds(props.clock.prevTime);
