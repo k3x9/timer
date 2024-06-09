@@ -46,6 +46,8 @@ const Clock = (props) => {
                     return task;
                 });
             });
+            if(seconds === 0)
+                window.alert("Time is up!");
         }
     }, [isRunning, seconds]);
 
